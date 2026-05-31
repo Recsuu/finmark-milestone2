@@ -1,0 +1,108 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f4f8;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.card {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 400px;
+}
+
+.logo {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 800;
+  color: #1a56db;
+  margin-bottom: 4px;
+}
+
+.title {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 24px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #444;
+}
+
+.field input {
+  padding: 10px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.field input:focus {
+  border-color: #1a56db;
+}
+
+.btn {
+  padding: 12px;
+  background: #1a56db;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s;
+}
+
+.btn:hover {
+  background: #1447b5;
+}
+
+.btn:disabled {
+  background: #93b4f0;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #e02424;
+  font-size: 13px;
+  text-align: center;
+  background: #fde8e8;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.link {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 13px;
+  color: #666;
+}
+
+.link a {
+  color: #1a56db;
+  font-weight: 600;
+  text-decoration: none;
+}
