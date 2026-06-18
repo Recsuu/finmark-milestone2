@@ -110,6 +110,12 @@ npm run dev       # nodemon, auto-restarts on changes
 ```
 Runs on `http://localhost:5000`
 
+Troubleshooting Steps:
+    If it's showing an error regarding missing "config.server" property
+    1. run: copy .env.example .env 
+    2. copy .env.example .env 
+    3. then run: npm run dev
+
 ### 4 — Run the frontend
 ```bash
 cd frontend
