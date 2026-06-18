@@ -62,21 +62,40 @@ finmark/
 
 ### Prerequisites
 - Node.js v18+ (tested on v24.15.0)
-- SQL Server Express + SSMS
+- Docker Desktop (for the database — no local SQL Server / SSMS install needed)
 - npm
 
-### 1 — Database setup
+### 1 — Database setup (Docker)
+Every teammate runs the exact same DB this way — no manual SSMS, no enabling TCP/IP or SQL Authentication by hand.
+
+```bash
+docker compose up -d
+```
+
+This starts a SQL Server container on `localhost:1433` and a one-shot init container that automatically applies `backend/config/setup.sql`:
+- Creates `FinMarkDB` and the `Users` table
+- Seeds one test admin account (`admin@finmark.com` / `Admin@1234`)
+
+Data persists in a Docker volume, so it survives container restarts. Check it came up clean with `docker compose logs db-init` (should end with `FinMarkDB setup complete!`).
+
+To reset the database from scratch: `docker compose down -v && docker compose up -d`.
+
+<details>
+<summary>Alternative: local SQL Server Express + SSMS (no Docker)</summary>
+
 1. Open SSMS and connect to your local SQL Server instance
 2. Open and run `backend/config/setup.sql`
-   - Creates `FinMarkDB` and the `Users` table
-   - Seeds one test admin account (`admin@finmark.com` / `Admin@1234`)
+3. Update `backend/.env` to match your local instance's credentials/port
+
+</details>
 
 ### 2 — Backend environment variables
-Create `backend/.env`:
+Copy `backend/.env.example` to `backend/.env` (defaults already match the Docker setup above):
 ```
 DB_USER=sa
-DB_PASSWORD=YourPassword
+DB_PASSWORD=FinMark@1234
 DB_SERVER=localhost
+DB_PORT=1433
 DB_NAME=FinMarkDB
 JWT_SECRET=your_secret_key
 JWT_EXPIRES_IN=1h
