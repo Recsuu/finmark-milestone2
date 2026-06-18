@@ -23,6 +23,14 @@ function DashboardPage() {
         <p style={{ textAlign: 'center', color: '#888', fontSize: '14px', marginBottom: '24px' }}>
           {user?.email}
         </p>
+        {user?.role === 'admin' && (
+          <div style={{ border: '1px solid #ddd', borderRadius: '8px', padding: '12px', marginBottom: '24px' }}>
+            <strong>Admin Tools</strong>
+            <p style={{ color: '#555', fontSize: '14px', margin: '4px 0 0' }}>
+              Manage Users (coming soon)
+            </p>
+          </div>
+        )}
         <button onClick={handleLogout} className={styles.btn}>
           Logout
         </button>

@@ -30,7 +30,7 @@ BEGIN
   VALUES (
     'Admin User',
     'admin@finmark.com',
-    '$2a$10$Nzr3VqHzX1qL0e5K9mWvDeXwY6T8pQkJlMnBcAsDfGhIjKlMnOpQr',
+    '$2a$10$B3Ya.au0PmAejHZOu5D9AOUFa.RNwU3IN1Ix7xLw9LjrYgj7h4rw2',
     'admin'
   );
 END

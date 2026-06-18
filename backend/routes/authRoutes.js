@@ -2,10 +2,11 @@ const express = require('express');
 const router = express.Router();
 const { register, login } = require('../controllers/authController');
 const { verifyToken } = require('../middleware/authMiddleware');
+const { loginLimiter } = require('../middleware/rateLimiter');
 
 // Public routes
 router.post('/register', register);
-router.post('/login', login);
+router.post('/login', loginLimiter, login);
 
 // Protected route (example - requires valid JWT)
 router.get('/me', verifyToken, (req, res) => {
