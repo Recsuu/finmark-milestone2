@@ -11,10 +11,11 @@ The core **Authentication Module** of the FinMark platform — user registration
 
 ```
 finmark/
+├── package.json                # Root dev orchestration (`npm run dev`)
 ├── backend/
 │   ├── config/
 │   │   ├── db.js              # MSSQL connection pool
-│   │   └── setup.sql          # Creates FinMarkDB and Users table
+│   │   └── setup.sql          # Creates FinMarkDB, Users, Appointments, Notifications tables
 │   ├── controllers/
 │   │   └── authController.js  # register() and login() handlers
 │   ├── middleware/
@@ -65,6 +66,18 @@ finmark/
 - Docker Desktop (for the database — no local SQL Server / SSMS install needed)
 - npm
 
+### Quick start (one command)
+From the repo root, after installing each project's dependencies once:
+```bash
+npm install                 # root (installs `concurrently`)
+npm install --prefix backend
+npm install --prefix frontend
+npm run dev
+```
+`npm run dev` starts the Docker DB (`docker compose up -d`), then runs the backend (nodemon) and frontend (react-scripts) together in one terminal, prefixed `backend`/`frontend` in the logs. Stop both with `Ctrl+C`; the DB container keeps running until you `docker compose down`.
+
+The steps below explain what that command does under the hood, and the manual alternative if you'd rather run each piece separately.
+
 ### 1 — Database setup (Docker)
 Every teammate runs the exact same DB this way — no manual SSMS, no enabling TCP/IP or SQL Authentication by hand.
 
@@ -73,7 +86,7 @@ docker compose up -d
 ```
 
 This starts a SQL Server container on `localhost:1433` and a one-shot init container that automatically applies `backend/config/setup.sql`:
-- Creates `FinMarkDB` and the `Users` table
+- Creates `FinMarkDB`, the `Users` table, the `Appointments` table, and the `Notifications` table
 - Seeds one test admin account (`admin@finmark.com` / `Admin@1234`)
 
 Data persists in a Docker volume, so it survives container restarts. Check it came up clean with `docker compose logs db-init` (should end with `FinMarkDB setup complete!`).
@@ -102,7 +115,7 @@ JWT_EXPIRES_IN=1h
 PORT=5000
 ```
 
-### 3 — Run the backend
+### 3 — Run the backend (manual alternative)
 ```bash
 cd backend
 npm install
@@ -110,7 +123,7 @@ npm run dev       # nodemon, auto-restarts on changes
 ```
 Runs on `http://localhost:5000`
 
-### 4 — Run the frontend
+### 4 — Run the frontend (manual alternative)
 ```bash
 cd frontend
 npm install

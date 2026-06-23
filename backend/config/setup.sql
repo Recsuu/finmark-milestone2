@@ -36,4 +36,32 @@ BEGIN
 END
 GO
 
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Appointments')
+BEGIN
+  CREATE TABLE Appointments (
+    id VARCHAR(50) PRIMARY KEY,
+    userId INT NOT NULL REFERENCES Users(id),
+    title VARCHAR(255) NOT NULL,
+    service VARCHAR(100) NOT NULL,
+    submissionDate VARCHAR(50) NOT NULL,
+    date VARCHAR(50) NOT NULL,
+    details VARCHAR(MAX),
+    attachments VARCHAR(MAX),
+    status VARCHAR(50) DEFAULT 'Pending'
+  );
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Notifications')
+BEGIN
+  CREATE TABLE Notifications (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    userId INT NOT NULL REFERENCES Users(id),
+    message VARCHAR(500) NOT NULL,
+    isRead BIT DEFAULT 0,
+    createdAt DATETIME DEFAULT GETDATE()
+  );
+END
+GO
+
 PRINT 'FinMarkDB setup complete!';
