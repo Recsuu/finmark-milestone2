@@ -1,0 +1,512 @@
+/* Dashboard Grid Architecture */
+.appContainer {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f8fafc; /* Canvas Base */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Sidebar Styling */
+.sidebar {
+  width: 260px;
+  height: 100vh;             /* 💡 Lock the sidebar strictly to the viewport frame height */
+  position: fixed;           /* 💡 Freeze its position so it ignores canvas content volume growth */
+  top: 0;
+  left: 0;
+  background-color: #0f172a; /* Deep Slate Blue */
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5rem;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;    /* Ensures padding doesn't blowout the 100vh constraint */
+  z-index: 10;               /* Keeps it hovering cleanly on top of backgrounds */
+}
+
+/* Main Content Workspace */
+.mainWorkspace {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: 260px;        /* 💡 Essential offset: matches sidebar width so layout never clips */
+  min-height: 100vh;
+}
+
+/* Content Layout Canvas */
+.contentArea {
+  padding: 2rem;
+  flex-grow: 1;              /* Allow the canvas space to absorb inner page dimensions */
+  /* Remove 'overflow-y: auto' from here so the body handles long scrolls naturally */
+}
+
+.brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  color: #ffffff;
+  margin-bottom: 2rem;
+}
+
+.navLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-grow: 1;
+}
+
+.navItem {
+  background: none; /* Clear native button borders */
+  border: none;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.95rem;
+  
+  padding: 0.75rem 1rem;
+  color: #94a3b8;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.navItem:hover, .navItemActive {
+  background-color: #1e293b;
+  color: #ffffff;
+}
+
+.logoutBtn {
+  background: none;
+  border: 1px solid #334155;
+  color: #94a3b8;
+  padding: 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.logoutBtn:hover {
+  background-color: #ef4444;
+  color: #ffffff;
+  border-color: #ef4444;
+}
+
+/* Main Content Workspace */
+.mainWorkspace {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header Bar Component */
+.header {
+  height: 70px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+}
+
+.profileZone {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.userBadge {
+  background-color: #e0f2fe;
+  color: #0284c7;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* Content Layout Canvas */
+.contentArea {
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.welcomeSection {
+  margin-bottom: 2rem;
+}
+
+.welcomeSection h1 {
+  color: #0f172a;
+  font-size: 1.75rem;
+  margin: 0 0 0.25rem 0;
+}
+
+.welcomeSection p {
+  color: #475569;
+  margin: 0;
+}
+
+/* KPI Summary Grid */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.cardTitle {
+  color: #475569;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.cardValue {
+  color: #0f172a;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+/* Data Tables */
+.tableContainer {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.tableHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.tableHeaderRow h3 {
+  margin: 0;
+  color: #0f172a;
+}
+
+.actionBtn {
+  background-color: #0284c7;
+  color: #ffffff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.actionBtn:hover {
+  background-color: #0369a1;
+}
+
+.dataTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.dataTable th {
+  background-color: #f8fafc;
+  color: #475569;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid #e2e8f0;
+  font-size: 0.875rem;
+}
+
+.dataTable td {
+  padding: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+  color: #334155;
+  font-size: 0.875rem;
+}
+
+/* Semantic Utility Badges */
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badgeSuccess {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.badgeWarning {
+  background-color: #ffedd5;
+  color: #9a3412;
+}
+
+/* Calendar Grid Layout */
+.calendarContainer {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  margin-top: 1.5rem;
+}
+
+.calendarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.calendarHeader h3 {
+  margin: 0;
+  color: #0f172a;
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.weekdayLabel {
+  font-weight: 600;
+  color: #64748b;
+  font-size: 0.875rem;
+  padding-bottom: 0.5rem;
+}
+
+.calendarDay {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 0.75rem 0.25rem;
+  min-height: 45px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: #334155;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.calendarDay:hover {
+  background-color: #e0f2fe;
+  border-color: #0284c7;
+}
+
+.hasAppointment {
+  background-color: #e0f2fe;
+  border-color: #bae6fd;
+  font-weight: 600;
+  color: #0369a1;
+}
+
+.appointmentDot {
+  width: 6px;
+  height: 6px;
+  background-color: #0284c7;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Modal Window Glass Backdrop Overlay */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(15, 23, 42, 0.6); /* Tinted Slate Backdrop */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modalCard {
+  background-color: #ffffff;
+  border-radius: 12px;
+  max-width: 480px;
+  width: 100%;
+  padding: 2rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.modalCard h3 {
+  margin-top: 0;
+  color: #0f172a;
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.formGroup {
+  margin-bottom: 1.25rem;
+}
+
+.formGroup label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #334155;
+  margin-bottom: 0.5rem;
+}
+
+.formGroup input, .formGroup select {
+  width: 100%;
+  padding: 0.625rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  color: #0f172a;
+  box-sizing: border-box;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.cancelBtn {
+  background: none;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.cancelBtn:hover {
+  background-color: #f1f5f9;
+}
+
+/* Custom Textarea for details */
+.formGroup textarea {
+  width: 100%;
+  padding: 0.625rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  color: #0f172a;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* File Attachment UI Elements */
+.fileUploadZone {
+  border: 2px dashed #cbd5e1;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  background-color: #f8fafc;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.fileUploadZone:hover {
+  background-color: #f1f5f9;
+  border-color: #0284c7;
+}
+
+.fileUploadZone input[type="file"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.uploadLabel {
+  font-size: 0.875rem;
+  color: #475569;
+}
+
+.uploadLabel strong {
+  color: #0284c7;
+}
+
+.fileList {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fileBadge {
+  background-color: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.815rem;
+  color: #334155;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.removeFileBtn {
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.815rem;
+}
+
+.removeFileBtn:hover {
+  text-decoration: underline;
+}
+
+/* Static Read-only Attachments display */
+.readOnlyAttachmentList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.staticFileBadge {
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+  padding: 0.375rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.815rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.divider {
+  border: 0;
+  height: 1px;
+  background: #e2e8f0;
+  margin: 1.5rem 0;
+}

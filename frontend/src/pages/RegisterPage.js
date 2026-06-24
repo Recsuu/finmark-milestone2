@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-import styles from '../components/Auth.module.css';
+import api from '../api/axios';
+import styles from './RegisterPage.module.css'; // Dedicated Register Style Module
 
 function RegisterPage() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const [form, setForm] = useState({ name: '', email: '', password: '', confirmPassword: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -16,12 +16,23 @@ function RegisterPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (form.password !== form.confirmPassword) {
+      return setError('Passwords do not match.');
+    }
+
     setLoading(true);
     try {
-      await axios.post('/api/auth/register', form);
+      // POST out to your user registration server endpoint
+      await api.post('/auth/register', {
+        name: form.name,
+        email: form.email,
+        password: form.password
+      });
+      
+      // Navigate straight to login after successful creation account verification
       navigate('/login');
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed. Please try again.');
+      setError(err.response?.data?.message || 'Registration failed. Try again.');
     } finally {
       setLoading(false);
     }
@@ -40,12 +51,12 @@ function RegisterPage() {
               name="name"
               value={form.name}
               onChange={handleChange}
-              placeholder="Juan dela Cruz"
+              placeholder="John Doe"
               required
             />
           </div>
           <div className={styles.field}>
-            <label>Email</label>
+            <label>Email Address</label>
             <input
               type="email"
               name="email"
@@ -66,13 +77,24 @@ function RegisterPage() {
               required
             />
           </div>
+          <div className={styles.field}>
+            <label>Confirm Password</label>
+            <input
+              type="password"
+              name="confirmPassword"
+              value={form.confirmPassword}
+              onChange={handleChange}
+              placeholder="••••••••"
+              required
+            />
+          </div>
           {error && <p className={styles.error}>{error}</p>}
           <button type="submit" className={styles.btn} disabled={loading}>
-            {loading ? 'Registering...' : 'Register'}
+            {loading ? 'Creating Account...' : 'Register'}
           </button>
         </form>
         <p className={styles.link}>
-          Already have an account? <Link to="/login">Sign in</Link>
+          Already registered? <Link to="/login">Sign In here</Link>
         </p>
       </div>
     </div>
