@@ -3,12 +3,18 @@ const jwt = require('jsonwebtoken');
 const { getPool, sql } = require('../config/db');
 require('dotenv').config();
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 // POST /api/auth/register
 const register = async (req, res) => {
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
     return res.status(400).json({ message: 'All fields are required.' });
+  }
+
+  if (!EMAIL_REGEX.test(email)) {
+    return res.status(400).json({ message: 'Please enter a valid email address.' });
   }
 
   try {
@@ -48,6 +54,10 @@ const login = async (req, res) => {
     return res.status(400).json({ message: 'Email and password are required.' });
   }
 
+  if (!EMAIL_REGEX.test(email)) {
+    return res.status(400).json({ message: 'Please enter a valid email address.' });
+  }
+
   try {
     const pool = getPool();
 
@@ -57,6 +67,7 @@ const login = async (req, res) => {
       .query('SELECT * FROM Users WHERE email = @email');
 
     if (result.recordset.length === 0) {
+      console.warn(`[AUTH] Failed login - unknown email "${email}" at ${new Date().toISOString()}`);
       return res.status(401).json({ message: 'Invalid email or password.' });
     }
 
@@ -65,6 +76,7 @@ const login = async (req, res) => {
     // Compare password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
+      console.warn(`[AUTH] Failed login - wrong password for "${email}" at ${new Date().toISOString()}`);
       return res.status(401).json({ message: 'Invalid email or password.' });
     }
 

@@ -1,60 +1,41 @@
-# FinMark – Milestone 2
-## MO-IT151 | Group 14 | H3101
+# Project Overview: FinMark Dashboard
 
----
+This document provides a summary of the features, architecture, and improvements implemented in the FinMark Dashboard application.
 
-## What We Set Up
+## Key Features
 
-The core **Authentication Module** of the FinMark platform — user registration, login, JWT-based session management, and a protected dashboard — directly implementing the Authentication Service defined in the Milestone 1 architecture.
+### Initial Progress
+  * Initialized both the client and admin dashboards
 
-### Project Structure
+### 1. Dashboard & Administrative Foundation
+* **Secure Data Sync:** Implemented a robust `axios` request interceptor. This automatically injects the `Authorization: Bearer <token>` header into every API call, preventing `401 Unauthorized` synchronization errors.
+* **Workspace Console:** Established a clear navigation structure separating Client "Overview" metrics from Administrative "Manage All" controls.
 
-```
-finmark/
-├── backend/
-│   ├── config/
-│   │   ├── db.js              # MSSQL connection pool
-│   │   └── setup.sql          # Creates FinMarkDB and Users table
-│   ├── controllers/
-│   │   └── authController.js  # register() and login() handlers
-│   ├── middleware/
-│   │   └── authMiddleware.js  # JWT Bearer token verification
-│   ├── routes/
-│   │   └── authRoutes.js      # Route definitions
-│   ├── .env                   # DB credentials and JWT config (not committed)
-│   ├── package.json
-│   └── server.js              # Express entry point, port 5000
-│
-└── frontend/
-    ├── public/index.html
-    ├── .env                   # HOST, PORT, DANGEROUSLY_DISABLE_HOST_CHECK
-    └── src/
-        ├── components/Auth.module.css
-        ├── pages/
-        │   ├── LoginPage.js       # Login form → POST /api/auth/login
-        │   ├── RegisterPage.js    # Register form → POST /api/auth/register
-        │   └── DashboardPage.js   # Protected, token-gated view
-        ├── App.js                 # React Router v6 routes
-        └── index.js
-```
+### 2. Appointment Management
+* **Database Engine:**
+    * **Create (POST):** Automated request system generating unique `APT-` prefixed reference handles.
+    * **Read (GET):** Persistent data fetching with integrated loading and error-handling states.
+    * **Update (PUT):** Bidirectional synchronization allowing both users and administrators to modify appointment parameters and pipeline statuses.
+* **Navigation & Efficiency:**
+    * **Pagination:** Implemented a paginated view (5 items per page) for appointment tables.
+    * **Sorting:** Added interactive sorting toggles, allowing users to filter appointment history by date.
 
-### Tech Stack
+### 3. Operational Intelligence
+* **Dynamic Metrics:** A live grid on the dashboard automatically calculates:
+    * **Total Appointments:** Cumulative count of all stored records.
+    * **Active Processing:** Filtered real-time count of requests with "Pending" status.
+* **Scheduling Calendar:** Interactive calendar component with month-navigation, allowing users to drill down into daily appointments.
 
-| Layer    | Technology          | Reason                                              |
-|----------|---------------------|-----------------------------------------------------|
-| Frontend | React 18 + Router v6 | Component-based UI, declarative routing            |
-| Backend  | Node.js + Express   | Lightweight REST API                                |
-| Database | MSSQL (mssql v11)   | Consistent with Milestone 1 architecture           |
-| Auth     | jsonwebtoken        | Stateless JWT, specified in Milestone 1            |
-| Security | bcryptjs            | Password hashing (salt rounds: 10)                 |
+### 4. UI/UX & Asset Pipeline
+* **Document Attachment Pipeline:** Integrated file management support, allowing users to upload, view, and manage supporting documentation associated with specific appointment slots.
+* **Admin Pipeline Control:** Added a granular status management system for Admins (Pending, Approved, In-Progress, Rejected, Completed) that dynamically updates the visibility/actionable status of appointments for the client.
 
-### API Endpoints
+## Work in Progress (WIP)
+* **Notification Dropdown**: Fully functional and integrated with the backend; currently filtering for role-based view permissions.
+* **Live Notification Sync**: Real-time updates are active; the current focus is on maintaining clean logs within the `Notifications` table.
 
-| Method | Endpoint           | Description                    | Auth Required |
-|--------|--------------------|--------------------------------|---------------|
-| POST   | /api/auth/register | Register new user              | No            |
-| POST   | /api/auth/login    | Login, returns signed JWT      | No            |
-| GET    | /api/auth/me       | Return current user from token | Yes (Bearer)  |
+## AI Disclosure
+This documentation and the accompanying codebase updates were developed with AI collaboration to ensure system state consistency, database idempotency, and the resolution of redundant notification triggers.
 
 ---
 
@@ -106,14 +87,13 @@ PORT=5000
 ```bash
 cd backend
 npm install
-npm run dev       # nodemon, auto-restarts on changes
+npm run dev
 ```
 Runs on `http://localhost:5000`
 
-Troubleshooting Steps:
-If it's showing an error regarding missing "config.server" property
-1. run: copy .env.example .env
-2. then run: npm run dev
+Troubleshooting: If it's showing an error regarding missing "config.server" property:
+1. Run: `copy .env.example .env`
+2. Then run: `npm run dev`
 
 ### 4 — Run the frontend
 ```bash
@@ -144,7 +124,7 @@ Root cause: when `proxy` is set in `package.json`, react-scripts 5 builds `allow
 **Fix applied:**
 - Upgraded `react-scripts` to `5.0.1` (webpack 5, no OpenSSL legacy provider needed)
 - Removed `--openssl-legacy-provider` from the start script
-- Added `DANGEROUSLY_DISABLE_HOST_CHECK=true` to `frontend/.env` — forces `allowedHosts: 'all'` instead of the broken dynamic array
+- Added `DANGEROUSLY_DISABLE_HOST_CHECK=true` to `frontend/.env`
 
 **2. MSSQL local setup**
 SQL Server requires TCP/IP to be explicitly enabled in SQL Server Configuration Manager, and SQL Authentication must be turned on separately from Windows Authentication. Neither is on by default.

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-import styles from '../components/Auth.module.css';
+import api from '../api/axios'; 
+import styles from './LoginPage.module.css'; 
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -18,12 +18,23 @@ function LoginPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post('/api/auth/login', form);
+      const res = await api.post('/auth/login', form);
+      
+      const sessionPayload = {
+        ...res.data.user,
+        token: res.data.token
+      };
+      
       localStorage.setItem('token', res.data.token);
-      localStorage.setItem('user', JSON.stringify(res.data.user));
-      navigate('/dashboard');
+      localStorage.setItem('user', JSON.stringify(sessionPayload));
+      
+      if (res.data.user?.role === 'Admin') {
+        navigate('/admin');
+      } else {
+        navigate('/dashboard'); 
+      }
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
+      setError(err.response?.data?.message || 'Login failed. Please verify credentials.');
     } finally {
       setLoading(false);
     }
@@ -36,7 +47,7 @@ function LoginPage() {
         <h2 className={styles.title}>Sign In</h2>
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.field}>
-            <label>Email</label>
+            <label>Email Address</label>
             <input
               type="email"
               name="email"
