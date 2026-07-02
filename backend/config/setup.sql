@@ -59,8 +59,17 @@ BEGIN
     userId INT NOT NULL REFERENCES Users(id),
     message VARCHAR(500) NOT NULL,
     isRead BIT DEFAULT 0,
-    createdAt DATETIME DEFAULT GETDATE()
+    createdAt DATETIME DEFAULT GETDATE(),
+    appointmentId VARCHAR(50)
   );
+END
+ELSE
+BEGIN
+  -- Add appointmentId if upgrading from an older schema that didn't have it
+  IF NOT EXISTS (SELECT * FROM sys.columns WHERE Name = N'appointmentId' AND Object_ID = Object_ID(N'Notifications'))
+  BEGIN
+    ALTER TABLE Notifications ADD appointmentId VARCHAR(50);
+  END
 END
 GO
 
